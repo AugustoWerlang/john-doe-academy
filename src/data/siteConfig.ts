@@ -53,5 +53,5 @@ export const SITE = {
     tiktok: "https://example.com/demo-tiktok",
   },
   certifications: ["Demo Project", "Portfolio Sample"],
-  url: "https://example.com/john-doe-academy",
+  url: "https://fly.codename.com.br/",
 } satisfies SiteConfig;
