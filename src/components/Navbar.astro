@@ -1,0 +1,367 @@
+---
+import { SITE } from '../data/siteConfig';
+import { mainNav, ctaLink } from '../data/navigation';
+import Button from './ui/Button.astro';
+import { cn } from '../lib/ui/cn';
+
+interface Props {
+    pathname: string;
+}
+
+const rawProps = Astro.props as Partial<Props>;
+const pathname =
+    typeof rawProps.pathname === 'string' && rawProps.pathname.length > 0
+        ? rawProps.pathname
+        : Astro.url.pathname;
+
+const isActive = (href: string) =>
+    href === '/' ? pathname === '/' : pathname.startsWith(href);
+---
+
+<header>
+    <div class="border-line-inverse-soft bg-primary text-inverse border-b">
+        <div
+            class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-5 gap-y-1 px-6 py-2.5 lg:px-12"
+        >
+            <p
+                class="tracking-label text-inverse-muted font-sans text-[10px] font-medium uppercase"
+            >
+                Austin, Texas · FAA Part 61 Training
+            </p>
+            <div class="flex items-center gap-4">
+                <a
+                    href={`tel:${SITE.phoneRaw}`}
+                    class="text-inverse-muted hover:text-accent font-sans text-xs font-medium transition-colors"
+                >
+                    {SITE.phone}
+                </a>
+                <a
+                    href={`mailto:${SITE.email}`}
+                    class="text-inverse-muted hover:text-accent hidden font-sans text-xs font-medium transition-colors sm:inline"
+                >
+                    {SITE.email}
+                </a>
+                <a
+                    href="/?interest=private-pilot&source=top-bar#contact"
+                    class="tracking-label text-inverse-muted hover:text-accent font-sans text-[11px] font-semibold uppercase transition-colors sm:hidden"
+                >
+                    Contact
+                </a>
+                <div class="hidden items-center gap-4 md:flex">
+                    <a
+                        href={SITE.social.instagram}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-inverse-muted hover:text-accent transition-colors"
+                        aria-label="Instagram"
+                    >
+                        <svg
+                            class="h-4 w-4"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                            ><path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                            ></path></svg
+                        >
+                    </a>
+                    <a
+                        href={SITE.social.facebook}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-inverse-muted hover:text-accent transition-colors"
+                        aria-label="Facebook"
+                    >
+                        <svg
+                            class="h-4 w-4"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                            ><path
+                                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385h-3.047v-3.47h3.047v-2.642c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953h-1.514c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385c5.738-.9 10.126-5.864 10.126-11.854z"
+                            ></path></svg
+                        >
+                    </a>
+                    <a
+                        href={SITE.social.youtube}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-inverse-muted hover:text-accent transition-colors"
+                        aria-label="YouTube"
+                    >
+                        <svg
+                            class="h-4 w-4"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                            ><path
+                                d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
+                            ></path></svg
+                        >
+                    </a>
+                    <a
+                        href={SITE.social.tiktok}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-inverse-muted hover:text-accent transition-colors"
+                        aria-label="TikTok"
+                    >
+                        <svg
+                            class="h-4 w-4"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                            ><path
+                                d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"
+                            ></path></svg
+                        >
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<nav
+    id="main-nav"
+    class="border-line-soft bg-surface-soft sticky top-0 z-40 border-b transition-all duration-300"
+>
+    <div
+        class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-12"
+    >
+        <a
+            href="/"
+            class="text-primary hover:text-accent font-serif text-2xl font-semibold tracking-tight transition-colors"
+            transition:name="site-logo"
+        >
+            {SITE.shortName}
+        </a>
+
+        <div class="hidden items-center gap-8 lg:flex">
+            {
+                mainNav.map((link) => (
+                    <a
+                        href={link.href}
+                        aria-current={isActive(link.href) ? 'page' : undefined}
+                        class={cn(
+                            'tracking-label font-sans text-xs font-semibold uppercase transition-colors duration-200',
+                            isActive(link.href)
+                                ? 'text-primary'
+                                : 'text-muted hover:text-accent',
+                        )}
+                    >
+                        {link.label}
+                    </a>
+                ))
+            }
+            <Button href={ctaLink.href} variant="primary" size="sm">
+                {ctaLink.label}
+            </Button>
+        </div>
+
+        <button
+            id="menu-toggle"
+            type="button"
+            class="flex h-11 w-11 flex-col items-center justify-center gap-1.5 rounded-full lg:hidden"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobile-menu"
+            aria-haspopup="dialog"
+        >
+            <span
+                class="bg-primary block h-0.5 w-6 origin-center transition-all duration-300"
+                id="bar-1"></span>
+            <span
+                class="bg-primary block h-0.5 w-6 transition-all duration-300"
+                id="bar-2"></span>
+            <span
+                class="bg-primary block h-0.5 w-6 origin-center transition-all duration-300"
+                id="bar-3"></span>
+        </button>
+    </div>
+</nav>
+
+<div
+    id="mobile-menu"
+    class="bg-primary text-inverse fixed inset-0 z-50 flex flex-col justify-between px-8 py-10"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="mobile-menu-title"
+    hidden
+>
+    <div class="flex items-start justify-between">
+        <p id="mobile-menu-title" class="text-inverse font-serif text-2xl">
+            {SITE.shortName}
+        </p>
+        <button
+            id="mobile-menu-close"
+            type="button"
+            class="tracking-label text-inverse-muted hover:text-inverse font-sans text-xs font-semibold uppercase transition-colors"
+            aria-label="Close menu"
+        >
+            Close
+        </button>
+    </div>
+
+    <div class="flex flex-col gap-5">
+        {
+            mainNav.map((link, i) => (
+                <a
+                    href={link.href}
+                    aria-current={isActive(link.href) ? 'page' : undefined}
+                    class={cn(
+                        'mobile-nav-link font-serif text-4xl opacity-0 transition-colors',
+                        isActive(link.href)
+                            ? 'text-accent'
+                            : 'text-inverse hover:text-accent',
+                    )}
+                    style={`animation-delay: ${(0.08 + i * 0.07).toFixed(2)}s`}
+                >
+                    {link.label}
+                </a>
+            ))
+        }
+        <a
+            href={ctaLink.href}
+            class="mobile-nav-link bg-accent tracking-label text-inverse mt-2 inline-flex w-fit rounded-full px-5 py-2.5 font-sans text-xs font-semibold uppercase opacity-0"
+            style={`animation-delay: ${(0.08 + mainNav.length * 0.07).toFixed(2)}s`}
+        >
+            {ctaLink.label}
+        </a>
+    </div>
+
+    <a
+        href={`tel:${SITE.phoneRaw}`}
+        class="mobile-nav-link text-inverse-muted hover:text-accent font-sans text-sm opacity-0 transition-colors"
+        style={`animation-delay: ${(0.08 + (mainNav.length + 1) * 0.07).toFixed(2)}s`}
+    >
+        {SITE.phone}
+    </a>
+</div>
+
+<style>
+    :global(.nav-scrolled) {
+        background-color: var(--color-surface-soft);
+        border-bottom-color: var(--color-line-soft);
+        box-shadow: var(--shadow-m);
+    }
+
+    .mobile-menu-open .mobile-nav-link {
+        animation: nav-link-in 0.45s ease both;
+    }
+</style>
+
+<script>
+    function initNav() {
+        const toggle = document.getElementById('menu-toggle');
+        const closeBtn = document.getElementById('mobile-menu-close');
+        const menu = document.getElementById('mobile-menu');
+        const bar1 = document.getElementById('bar-1');
+        const bar2 = document.getElementById('bar-2');
+        const bar3 = document.getElementById('bar-3');
+
+        if (!toggle || !closeBtn || !menu || toggle.dataset.bound === 'true')
+            return;
+        toggle.dataset.bound = 'true';
+
+        let open = false;
+        let previousFocusedElement: HTMLElement | null = null;
+
+        const getFocusableEls = () => {
+            const selectors =
+                'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+            return Array.from(menu.querySelectorAll(selectors)).filter(
+                (el): el is HTMLElement =>
+                    el instanceof HTMLElement &&
+                    !el.hasAttribute('disabled') &&
+                    !el.hasAttribute('hidden') &&
+                    el.getAttribute('aria-hidden') !== 'true',
+            );
+        };
+
+        const setMenu = (state: boolean) => {
+            open = state;
+            toggle.setAttribute('aria-expanded', String(open));
+            toggle.setAttribute(
+                'aria-label',
+                open ? 'Close menu' : 'Open menu',
+            );
+            menu.setAttribute('aria-hidden', String(!open));
+
+            if (open) {
+                previousFocusedElement =
+                    document.activeElement instanceof HTMLElement
+                        ? document.activeElement
+                        : null;
+                menu.hidden = false;
+                menu.classList.add('mobile-menu-open');
+                document.body.style.overflow = 'hidden';
+                bar1?.style.setProperty(
+                    'transform',
+                    'rotate(45deg) translateY(4px)',
+                );
+                bar2?.style.setProperty('opacity', '0');
+                bar3?.style.setProperty(
+                    'transform',
+                    'rotate(-45deg) translateY(-4px)',
+                );
+                closeBtn.focus();
+            } else {
+                menu.hidden = true;
+                menu.classList.remove('mobile-menu-open');
+                document.body.style.overflow = '';
+                bar1?.style.setProperty('transform', 'none');
+                bar2?.style.setProperty('opacity', '1');
+                bar3?.style.setProperty('transform', 'none');
+                if (
+                    previousFocusedElement &&
+                    previousFocusedElement.isConnected
+                ) {
+                    previousFocusedElement.focus();
+                }
+                previousFocusedElement = null;
+            }
+        };
+
+        const handleKeydown = (event: KeyboardEvent) => {
+            if (!open) return;
+
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                setMenu(false);
+                return;
+            }
+
+            if (event.key !== 'Tab') return;
+            const focusableEls = getFocusableEls();
+            if (!focusableEls.length) {
+                event.preventDefault();
+                return;
+            }
+
+            const first = focusableEls[0];
+            const last = focusableEls[focusableEls.length - 1];
+            const activeElement = document.activeElement;
+
+            if (event.shiftKey) {
+                if (activeElement === first || !menu.contains(activeElement)) {
+                    event.preventDefault();
+                    last.focus();
+                }
+                return;
+            }
+
+            if (activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        };
+
+        toggle.addEventListener('click', () => setMenu(!open));
+        closeBtn.addEventListener('click', () => setMenu(false));
+        menu.querySelectorAll('a').forEach((a) => {
+            a.addEventListener('click', () => setMenu(false));
+        });
+        document.addEventListener('keydown', handleKeydown);
+    }
+
+    initNav();
+    document.addEventListener('astro:after-swap', initNav);
+</script>

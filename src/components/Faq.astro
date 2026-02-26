@@ -1,0 +1,93 @@
+---
+import { faq } from '../data/faq';
+import SectionLabel from './ui/SectionLabel.astro';
+import Container from './ui/Container.astro';
+import JsonLd from './ui/JsonLd.astro';
+
+const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.answer,
+        },
+    })),
+};
+---
+
+<section class="py-20 lg:py-28">
+    <Container>
+        <div class="grid grid-cols-1 gap-12 lg:grid-cols-5 lg:gap-24">
+            <div class="lg:sticky lg:top-32 lg:col-span-2 lg:self-start">
+                <SectionLabel class="mb-4" data-reveal="0">FAQ</SectionLabel>
+                <h2
+                    class="text-primary font-serif text-3xl tracking-tight lg:text-4xl"
+                    data-reveal="0.1"
+                >
+                    Your questions, answered
+                </h2>
+                <p
+                    class="text-muted mt-4 font-sans text-sm leading-relaxed"
+                    data-reveal="0.15"
+                >
+                    Can't find what you're looking for? Give us a call or send a
+                    message — we're happy to help.
+                </p>
+            </div>
+
+            <div class="lg:col-span-3">
+                <div class="border-line-soft border-t">
+                    {
+                        faq.map((item, i) => (
+                            <details
+                                class="group"
+                                data-accordion
+                                data-reveal={String(i * 0.08)}
+                            >
+                                <summary class="border-line-soft hover:bg-overlay-soft flex cursor-pointer items-center justify-between gap-4 border-b px-5 py-5 transition-colors">
+                                    <h3 class="text-primary font-sans text-sm font-medium lg:text-base">
+                                        {item.question}
+                                    </h3>
+                                    <span class="border-line-soft text-muted relative grid h-6 w-6 shrink-0 place-items-center rounded-full border">
+                                        <span class="faq-plus text-base leading-none">
+                                            +
+                                        </span>
+                                        <span class="faq-minus absolute text-base leading-none">
+                                            -
+                                        </span>
+                                    </span>
+                                </summary>
+                                <div class="accordion-body">
+                                    <div>
+                                        <p class="text-muted px-5 pb-5 font-sans text-sm leading-relaxed">
+                                            {item.answer}
+                                        </p>
+                                    </div>
+                                </div>
+                            </details>
+                        ))
+                    }
+                </div>
+            </div>
+        </div>
+    </Container>
+</section>
+
+<JsonLd data={faqSchema} />
+
+<style>
+    details .faq-minus {
+        opacity: 0;
+    }
+
+    details[open] .faq-plus {
+        opacity: 0;
+    }
+
+    details[open] .faq-minus {
+        opacity: 1;
+    }
+</style>

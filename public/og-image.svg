@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">John Doe Academy</title>
+  <desc id="desc">John Doe Academy demo site in Austin, Texas</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5f0e8" />
+      <stop offset="100%" stop-color="#d6d0c4" />
+    </linearGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#c2410c" stop-opacity="0" />
+      <stop offset="25%" stop-color="#c2410c" stop-opacity="1" />
+      <stop offset="75%" stop-color="#1c1917" stop-opacity="1" />
+      <stop offset="100%" stop-color="#1c1917" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <g fill="none" stroke="url(#line)" stroke-width="2">
+    <path d="M0 490C160 440 300 455 470 410C640 365 780 295 950 315C1045 326 1120 362 1200 405" />
+    <path d="M0 535C170 500 310 515 500 470C690 425 820 365 1000 390C1075 401 1135 430 1200 462" />
+  </g>
+  <g fill="#1c1917">
+    <text x="96" y="268" font-size="76" font-family="Georgia, 'Times New Roman', serif">John Doe Academy</text>
+    <text x="96" y="328" font-size="44" font-family="system-ui, sans-serif" letter-spacing="4">FLIGHT ACADEMY</text>
+    <text x="96" y="392" font-size="30" font-family="system-ui, sans-serif" fill="#c2410c">Learn to Fly in Austin, Texas</text>
+  </g>
+</svg>

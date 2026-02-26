@@ -1,0 +1,47 @@
+---
+import Button from './ui/Button.astro';
+import Container from './ui/Container.astro';
+import { SITE } from '../data/siteConfig';
+---
+
+<section id="book" class="bg-primary py-20 lg:py-28">
+    <Container>
+        <div class="relative mx-auto max-w-3xl text-center" data-reveal="0">
+            <p
+                class="tracking-label text-inverse-muted font-sans text-[10px] font-semibold uppercase"
+            >
+                Start Here
+            </p>
+            <h2
+                class="text-inverse mt-4 font-serif text-4xl leading-tight tracking-tight lg:text-5xl"
+            >
+                Ready for your first takeoff?
+            </h2>
+            <p
+                class="text-inverse-muted mt-5 font-sans text-sm leading-relaxed lg:text-base"
+            >
+                Book a discovery flight and spend 30 minutes flying with an
+                instructor. No previous experience required.
+            </p>
+            <div
+                class="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row"
+            >
+                <Button
+                    href="/?interest=discovery-flight&source=cta-banner#contact"
+                    variant="primary"
+                    size="lg"
+                >
+                    Book Discovery Flight
+                </Button>
+                <Button
+                    href={`tel:${SITE.phoneRaw}`}
+                    variant="outline"
+                    class="border-inverse-soft text-inverse hover:border-inverse hover:bg-inverse hover:text-primary"
+                    size="lg"
+                >
+                    Call Admissions
+                </Button>
+            </div>
+        </div>
+    </Container>
+</section>

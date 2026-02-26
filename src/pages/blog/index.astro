@@ -1,0 +1,141 @@
+---
+import { getCollection } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Container from '../../components/ui/Container.astro';
+import SectionLabel from '../../components/ui/SectionLabel.astro';
+import SurfaceCard from '../../components/ui/SurfaceCard.astro';
+
+const posts = (await getCollection('blog')).sort(
+    (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const images = import.meta.glob<{ default: ImageMetadata }>(
+    '../../assets/images/blog-*.jpg',
+    { eager: true },
+);
+
+function getImage(filename: string): ImageMetadata | null {
+    const match = Object.entries(images).find(([path]) =>
+        path.endsWith(filename),
+    );
+    if (!match) return null;
+    return match[1].default;
+}
+---
+
+<SiteLayout
+    title="Blog | John Doe Academy Austin TX"
+    description="Aviation tips, flight training guides, and industry insights from John Doe Academy in Austin, Texas. Learn about becoming a pilot, training costs, and more."
+>
+    <section class="pt-20 pb-16 lg:pt-24 lg:pb-24">
+        <Container>
+            <nav aria-label="Breadcrumb" class="mb-8" data-reveal="0">
+                <ol
+                    class="text-muted flex items-center gap-2 font-sans text-xs"
+                >
+                    <li>
+                        <a href="/" class="hover:text-accent transition-colors"
+                            >Home</a
+                        >
+                    </li>
+                    <li aria-hidden="true">/</li>
+                    <li class="text-muted">Blog</li>
+                </ol>
+            </nav>
+
+            <SectionLabel class="mb-4" data-reveal="0"
+                >News & Resources</SectionLabel
+            >
+            <h1
+                class="text-primary max-w-lg font-serif text-4xl leading-tight tracking-tight lg:text-5xl"
+                data-reveal="0.1"
+            >
+                Flight training insights & aviation tips
+            </h1>
+            <p
+                class="text-muted mt-4 max-w-md font-sans text-base leading-relaxed"
+                data-reveal="0.15"
+            >
+                Guides, industry news, and practical advice for aspiring pilots
+                in Austin and beyond.
+            </p>
+        </Container>
+    </section>
+
+    <section class="py-20 lg:py-28">
+        <Container>
+            <div
+                class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-12"
+            >
+                {
+                    posts.map((post, i) => {
+                        const img = getImage(post.data.image);
+                        const formattedDate = post.data.date.toLocaleDateString(
+                            'en-US',
+                            {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric',
+                            },
+                        );
+
+                        return (
+                            <a
+                                href={`/blog/${post.id}`}
+                                class="group block"
+                                data-reveal={String(i * 0.1)}
+                            >
+                                <SurfaceCard class="h-full">
+                                    {img && (
+                                        <div class="aspect-16/10 overflow-hidden">
+                                            <img
+                                                src={img.src}
+                                                alt={post.data.title}
+                                                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                                loading="lazy"
+                                                transition:name={`blog-image-${post.data.image}`}
+                                            />
+                                        </div>
+                                    )}
+                                    <div class="px-5 pt-5 pb-6">
+                                        <div class="flex items-center gap-3">
+                                            <span class="tracking-label text-accent font-sans text-[10px] font-semibold uppercase">
+                                                {post.data.category}
+                                            </span>
+                                            <span
+                                                class="text-muted"
+                                                aria-hidden="true"
+                                            >
+                                                &middot;
+                                            </span>
+                                            <span class="text-muted font-sans text-xs">
+                                                {post.data.readTime}
+                                            </span>
+                                        </div>
+                                        <h2 class="text-primary group-hover:text-accent mt-3 font-serif text-xl leading-snug transition-colors lg:text-2xl">
+                                            {post.data.title}
+                                        </h2>
+                                        <p class="text-muted mt-2 line-clamp-2 font-sans text-sm leading-relaxed">
+                                            {post.data.description}
+                                        </p>
+                                        <div class="text-muted mt-4 flex items-center gap-2 font-sans text-xs">
+                                            <time
+                                                datetime={post.data.date.toISOString()}
+                                            >
+                                                {formattedDate}
+                                            </time>
+                                            <span aria-hidden="true">
+                                                &middot;
+                                            </span>
+                                            <span>{post.data.author}</span>
+                                        </div>
+                                    </div>
+                                </SurfaceCard>
+                            </a>
+                        );
+                    })
+                }
+            </div>
+        </Container>
+    </section>
+</SiteLayout>

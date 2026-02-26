@@ -1,0 +1,84 @@
+---
+import { Image } from 'astro:assets';
+import { fleet } from '../data/fleet';
+import SectionLabel from './ui/SectionLabel.astro';
+import Container from './ui/Container.astro';
+import SurfaceCard from './ui/SurfaceCard.astro';
+import cessnaFlyingImg from '../assets/images/cessna-flying.jpg';
+import cessnaParkedImg from '../assets/images/cessna-parked.jpg';
+import piperArcherImg from '../assets/images/piper-archer.jpg';
+
+const images: Record<string, ImageMetadata> = {
+    'cessna-flying.jpg': cessnaFlyingImg,
+    'cessna-parked.jpg': cessnaParkedImg,
+    'piper-archer.jpg': piperArcherImg,
+};
+
+function getImage(filename: string) {
+    return images[filename];
+}
+---
+
+<section id="fleet" class="py-20 lg:py-28">
+    <Container>
+        <div class="mb-6">
+            <div>
+                <SectionLabel class="mb-3" data-reveal="0"
+                    >Our Fleet</SectionLabel
+                >
+                <h2
+                    class="text-primary font-serif text-4xl tracking-tight lg:text-5xl"
+                    data-reveal="0.05"
+                >
+                    Train on dependable aircraft
+                </h2>
+                <p
+                    class="text-muted mt-4 max-w-3xl font-sans text-sm leading-relaxed lg:text-base"
+                    data-reveal="0.08"
+                >
+                    Three aircraft, one consistent standard. You train across
+                    the full lineup from day one without waiting for a carousel
+                    or hidden slides.
+                </p>
+            </div>
+        </div>
+
+        <div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {
+                fleet.map((plane, i) => {
+                    const img = getImage(plane.image);
+                    return (
+                        <SurfaceCard data-reveal={String(i * 0.1)}>
+                            <div class="relative aspect-5/3 w-full overflow-hidden">
+                                {img && (
+                                    <Image
+                                        src={img}
+                                        alt={`${plane.name} training aircraft at John Doe Academy`}
+                                        class="h-full w-full object-cover"
+                                        widths={[360, 560, 760]}
+                                        sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
+                                        loading="lazy"
+                                    />
+                                )}
+                                <p class="bg-surface-soft tracking-label text-muted absolute top-4 left-4 rounded-full px-3 py-1 font-sans text-[10px] font-semibold uppercase">
+                                    {plane.type}
+                                </p>
+                            </div>
+                            <div class="px-5 pt-5 pb-6">
+                                <h3 class="text-primary font-serif text-2xl leading-tight">
+                                    {plane.name}
+                                </h3>
+                                <p class="tracking-label text-muted mt-2 font-sans text-[10px] font-semibold uppercase">
+                                    {plane.specs}
+                                </p>
+                                <p class="border-line-soft text-muted mt-4 border-t pt-4 font-sans text-sm leading-relaxed">
+                                    {plane.description}
+                                </p>
+                            </div>
+                        </SurfaceCard>
+                    );
+                })
+            }
+        </div>
+    </Container>
+</section>

@@ -1,0 +1,64 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Container from '../components/ui/Container.astro';
+import Button from '../components/ui/Button.astro';
+import { SITE } from '../data/siteConfig';
+---
+
+<SiteLayout
+    title="Thank You | John Doe Academy"
+    description="Thank you for contacting John Doe Academy. We'll be in touch shortly."
+>
+    <section class="flex min-h-[60vh] items-center py-20 lg:py-28">
+        <Container>
+            <div class="mx-auto max-w-2xl text-center" data-reveal="0">
+                <div
+                    class="bg-success-soft mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full"
+                >
+                    <svg
+                        class="text-success h-8 w-8"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M4.5 12.75l6 6 9-13.5"></path>
+                    </svg>
+                </div>
+                <h1
+                    class="text-primary font-serif text-4xl tracking-tight lg:text-5xl"
+                >
+                    Thank you!
+                </h1>
+                <p
+                    class="text-muted mt-4 font-sans text-base leading-relaxed lg:text-lg"
+                >
+                    Your message has been received. One of our team members will
+                    be in touch within 24 hours. In the meantime, feel free to
+                    give us a call.
+                </p>
+                <p class="mt-6">
+                    <a
+                        href={`tel:${SITE.phoneRaw}`}
+                        class="text-accent hover:text-accent font-sans text-lg font-medium transition-colors"
+                    >
+                        {SITE.phone}
+                    </a>
+                </p>
+                <div
+                    class="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
+                >
+                    <Button href="/" variant="primary" size="lg">
+                        Back to Home
+                    </Button>
+                    <Button href="/blog" variant="outline" size="lg">
+                        Read Our Blog
+                    </Button>
+                </div>
+            </div>
+        </Container>
+    </section>
+</SiteLayout>

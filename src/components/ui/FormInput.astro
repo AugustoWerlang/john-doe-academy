@@ -1,0 +1,59 @@
+---
+import { cn } from '../../lib/ui/cn';
+
+interface Props {
+    name: string;
+    id?: string;
+    label?: string;
+    type?: 'text' | 'email' | 'tel' | 'number' | 'password';
+    placeholder: string;
+    required?: boolean;
+    class?: string;
+}
+
+const {
+    name,
+    id,
+    label,
+    type = 'text',
+    placeholder,
+    required = false,
+    class: className = '',
+} = Astro.props as Props;
+const inputId = typeof id === 'string' && id.length > 0 ? id : name;
+
+const inputClasses =
+    'w-full border-b border-line-soft bg-transparent py-3 font-sans text-sm text-primary placeholder:text-muted focus:border-primary focus:outline-none';
+---
+
+{
+    label ? (
+        <div class="space-y-2">
+            <label
+                for={inputId}
+                class="tracking-label text-muted font-sans text-[10px] font-semibold uppercase"
+            >
+                {label}
+            </label>
+            <input
+                id={inputId}
+                type={type}
+                name={name}
+                placeholder={placeholder}
+                aria-label={label}
+                required={required}
+                class={cn(inputClasses, className)}
+            />
+        </div>
+    ) : (
+        <input
+            id={inputId}
+            type={type}
+            name={name}
+            placeholder={placeholder}
+            aria-label={placeholder}
+            required={required}
+            class={cn(inputClasses, className)}
+        />
+    )
+}

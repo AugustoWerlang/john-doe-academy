@@ -1,0 +1,66 @@
+---
+import SectionLabel from './ui/SectionLabel.astro';
+import Container from './ui/Container.astro';
+
+const reasons = [
+    {
+        title: 'Instructor continuity',
+        text: 'You train with a consistent instructor team, not random schedule coverage. Better progression, fewer resets, cleaner checkride prep.',
+    },
+    {
+        title: 'Operational discipline',
+        text: 'Briefings, debriefings, and safety standards mirror professional flight operations while staying approachable for beginners.',
+    },
+    {
+        title: 'Retention-first pacing',
+        text: 'Lesson sequencing is tuned for memory retention so each flight compounds previous work instead of repeating it.',
+    },
+];
+---
+
+<section class="py-20 lg:py-28">
+    <Container>
+        <div
+            class="grid grid-cols-1 gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-10"
+        >
+            <div class="relative overflow-hidden p-2 sm:p-4 lg:p-6">
+                <SectionLabel class="mb-4" data-reveal="0"
+                    >Why John Doe Academy</SectionLabel
+                >
+                <h2
+                    class="text-primary font-serif text-4xl leading-tight tracking-tight lg:text-5xl"
+                    data-reveal="0.06"
+                >
+                    Structured training. Human coaching. Real confidence in the
+                    cockpit.
+                </h2>
+                <p
+                    class="text-muted mt-5 max-w-xl font-sans text-sm leading-relaxed lg:text-base"
+                    data-reveal="0.1"
+                >
+                    Most students do not need hype. They need a school that
+                    teaches clearly, keeps standards high, and helps them move
+                    from uncertainty to competence.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-5">
+                {
+                    reasons.map((reason, i) => (
+                        <article
+                            class="border-line-accent-soft border-l-2 pl-5 sm:pl-6"
+                            data-reveal={String(0.08 + i * 0.08)}
+                        >
+                            <h3 class="text-primary font-serif text-3xl leading-tight">
+                                {reason.title}
+                            </h3>
+                            <p class="text-muted mt-3 font-sans text-sm leading-relaxed lg:text-base">
+                                {reason.text}
+                            </p>
+                        </article>
+                    ))
+                }
+            </div>
+        </div>
+    </Container>
+</section>

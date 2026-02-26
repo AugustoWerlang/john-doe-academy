@@ -1,0 +1,73 @@
+---
+import { programs } from '../data/programs';
+import SectionLabel from './ui/SectionLabel.astro';
+import Container from './ui/Container.astro';
+import SurfaceCard from './ui/SurfaceCard.astro';
+import Button from './ui/Button.astro';
+---
+
+<section id="programs" class="py-20 lg:py-28">
+    <Container>
+        <SectionLabel class="mb-4" data-reveal="0"
+            >Training Programs</SectionLabel
+        >
+        <h2
+            class="text-primary max-w-2xl font-serif text-4xl leading-tight tracking-tight lg:text-5xl"
+            data-reveal="0.05"
+        >
+            Choose the path that fits your flying goals
+        </h2>
+
+        <div class="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-2">
+            {
+                programs.map((program, i) => (
+                    <SurfaceCard
+                        class="relative p-6"
+                        data-reveal={String(i * 0.08)}
+                    >
+                        <p class="tracking-label text-muted font-sans text-[10px] font-semibold uppercase">
+                            Program {program.num}
+                        </p>
+                        <h3 class="text-primary mt-3 font-serif text-3xl leading-tight">
+                            {program.title}
+                        </h3>
+                        <p class="text-muted mt-2 font-sans text-sm">
+                            {program.tagline}
+                        </p>
+                        <p class="text-muted mt-4 font-sans text-sm leading-relaxed">
+                            {program.detail}
+                        </p>
+
+                        <div class="tracking-label mt-5 flex flex-wrap items-center gap-3 text-[10px] font-semibold uppercase">
+                            <span class="bg-overlay-soft text-muted rounded-full px-3 py-1">
+                                {program.duration}
+                            </span>
+                            <span class="bg-overlay-soft text-muted rounded-full px-3 py-1">
+                                {program.hours}
+                            </span>
+                            <span class="bg-accent-soft text-accent rounded-full px-3 py-1">
+                                {program.price}
+                            </span>
+                        </div>
+
+                        <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+                            <a
+                                href={`/programs/${program.slug}`}
+                                class="tracking-label text-primary hover:text-accent inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase transition-colors"
+                            >
+                                View details <span aria-hidden="true">→</span>
+                            </a>
+                            <Button
+                                href={`/?interest=program-details&program=${program.slug}&source=program-card#contact`}
+                                variant={'secondary'}
+                                size={'sm'}
+                            >
+                                Enroll now
+                            </Button>
+                        </div>
+                    </SurfaceCard>
+                ))
+            }
+        </div>
+    </Container>
+</section>

@@ -1,0 +1,30 @@
+---
+import { cn } from '../../lib/ui/cn';
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'div'> {
+    class?: string;
+    frameClass?: string;
+    innerClass?: string;
+}
+
+const {
+    class: className = '',
+    frameClass = '',
+    innerClass = '',
+    ...rest
+} = Astro.props as Props;
+---
+
+<div class={cn('relative', className)} {...rest}>
+    <div
+        class={cn(
+            'pointer-events-none absolute -inset-2 rounded-[1.8rem] border border-line-soft bg-surface-soft',
+            frameClass,
+        )}
+    >
+    </div>
+    <div class={cn('relative overflow-hidden rounded-3xl', innerClass)}>
+        <slot />
+    </div>
+</div>

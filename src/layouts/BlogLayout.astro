@@ -1,0 +1,189 @@
+---
+import SiteLayout from './SiteLayout.astro';
+import Container from '../components/ui/Container.astro';
+import Button from '../components/ui/Button.astro';
+import ImageFrame from '../components/ui/ImageFrame.astro';
+
+interface Props {
+    title: string;
+    description: string;
+    date: Date;
+    author: string;
+    category: string;
+    readTime: string;
+    image: string;
+}
+
+const { title, description, date, author, category, readTime, image } =
+    Astro.props as Props;
+
+const formattedDate = date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+});
+
+const allImages = import.meta.glob<{ default: ImageMetadata }>(
+    '../assets/images/blog-*.jpg',
+    { eager: true },
+);
+
+function resolveHeroImage(filename: string): ImageMetadata | null {
+    const entry = Object.entries(allImages).find(([path]) =>
+        path.endsWith(filename),
+    );
+    if (!entry) return null;
+    return entry[1].default;
+}
+
+const heroImage = resolveHeroImage(image);
+---
+
+<SiteLayout
+    title={`${title} | John Doe Academy Blog`}
+    description={description}
+>
+    <slot name="head" slot="head" />
+    <article>
+        <header class="relative pt-20 pb-16 lg:pt-24 lg:pb-24">
+            <Container>
+                <nav aria-label="Breadcrumb" class="mb-8" data-reveal="0">
+                    <ol
+                        class="text-muted flex items-center gap-2 font-sans text-xs"
+                    >
+                        <li>
+                            <a
+                                href="/"
+                                class="hover:text-accent transition-colors"
+                                >Home</a
+                            >
+                        </li>
+                        <li aria-hidden="true">/</li>
+                        <li>
+                            <a
+                                href="/blog"
+                                class="hover:text-accent transition-colors"
+                                >Blog</a
+                            >
+                        </li>
+                        <li aria-hidden="true">/</li>
+                        <li class="text-muted max-w-50 truncate">{title}</li>
+                    </ol>
+                </nav>
+
+                <div class="max-w-3xl" data-reveal="0.1">
+                    <span
+                        class="tracking-label text-accent font-sans text-xs font-medium uppercase"
+                    >
+                        {category}
+                    </span>
+                    <h1
+                        class="text-primary mt-4 font-serif text-4xl leading-tight tracking-tight lg:text-5xl"
+                    >
+                        {title}
+                    </h1>
+                    <div
+                        class="text-muted mt-6 flex items-center gap-4 font-sans text-sm"
+                    >
+                        <span>{author}</span>
+                        <span aria-hidden="true">&middot;</span>
+                        <time datetime={date.toISOString()}
+                            >{formattedDate}</time
+                        >
+                        <span aria-hidden="true">&middot;</span>
+                        <span>{readTime}</span>
+                    </div>
+                </div>
+            </Container>
+        </header>
+
+        {
+            heroImage && (
+                <div data-reveal="0.2">
+                    <Container>
+                        <ImageFrame>
+                            <img
+                                src={heroImage.src}
+                                alt={title}
+                                class="aspect-21/9 w-full object-cover"
+                                loading="eager"
+                                transition:name={`blog-image-${image}`}
+                            />
+                        </ImageFrame>
+                    </Container>
+                </div>
+            )
+        }
+
+        <Container>
+            <div class="prose mx-auto max-w-3xl py-16 lg:py-24">
+                <slot />
+            </div>
+        </Container>
+
+        <section class="border-line-soft border-t py-16 lg:py-24">
+            <Container>
+                <div class="mx-auto max-w-2xl text-center">
+                    <h2
+                        class="text-primary font-serif text-3xl tracking-tight lg:text-4xl"
+                    >
+                        Ready to start your aviation journey?
+                    </h2>
+                    <p
+                        class="text-muted mt-4 font-sans text-sm leading-relaxed"
+                    >
+                        Book a discovery flight and experience Austin from the
+                        cockpit.
+                    </p>
+                    <div
+                        class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"
+                    >
+                        <Button
+                            href="/?interest=discovery-flight&source=blog-cta#contact"
+                            variant="primary"
+                            size="lg"
+                        >
+                            Book a Discovery Flight
+                        </Button>
+                        <Button
+                            id="share-article-button"
+                            variant="outline"
+                            size="lg"
+                            aria-label="Share this article"
+                        >
+                            Share Article
+                        </Button>
+                    </div>
+                </div>
+            </Container>
+        </section>
+    </article>
+    <script>
+        const shareButton = document.getElementById('share-article-button');
+
+        shareButton?.addEventListener('click', async () => {
+            const shareData = {
+                title: document.title,
+                text: 'Check out this article from John Doe Academy.',
+                url: window.location.href,
+            };
+
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                    return;
+                } catch {
+                    return;
+                }
+            }
+
+            if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(window.location.href);
+                shareButton.textContent = 'Link Copied';
+                setTimeout(() => {
+                    shareButton.textContent = 'Share Article';
+                }, 2000);
+            }
+        });
+    </script>
+</SiteLayout>

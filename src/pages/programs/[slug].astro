@@ -1,0 +1,459 @@
+---
+import { Image } from 'astro:assets';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Container from '../../components/ui/Container.astro';
+import SectionLabel from '../../components/ui/SectionLabel.astro';
+import Button from '../../components/ui/Button.astro';
+import ImageFrame from '../../components/ui/ImageFrame.astro';
+import SurfaceCard from '../../components/ui/SurfaceCard.astro';
+import Faq from '../../components/Faq.astro';
+import JsonLd from '../../components/ui/JsonLd.astro';
+import { SITE } from '../../data/siteConfig';
+import { programs } from '../../data/programs';
+import cessnaFlyingImg from '../../assets/images/cessna-flying.jpg';
+import cockpitImg from '../../assets/images/cockpit-instruments.jpg';
+import aerialImg from '../../assets/images/aerial-view.jpg';
+import heroPilotImg from '../../assets/images/hero-pilot-cockpit.jpg';
+import piperArcherImg from '../../assets/images/piper-archer.jpg';
+import cessnaParkedImg from '../../assets/images/cessna-parked.jpg';
+import sunsetRunwayImg from '../../assets/images/sunset-runway.jpg';
+import hangarImg from '../../assets/images/hangar.jpg';
+import CtaBanner from '../../components/CtaBanner.astro';
+
+export function getStaticPaths() {
+    return programs.map((program) => ({
+        params: { slug: program.slug },
+    }));
+}
+
+const { slug } = Astro.params;
+const program = programs.find((item) => item.slug === slug);
+
+if (!program) {
+    throw new Error(`Program not found: ${slug ?? 'unknown'}`);
+}
+
+const relatedPrograms = programs.filter((item) => item.slug !== program.slug);
+
+const mediaBySlug = {
+    'private-pilot': {
+        hero: cessnaFlyingImg,
+        heroAlt: 'Cessna training aircraft in flight over Texas',
+        support: aerialImg,
+        supportAlt: 'Aerial view of Texas landscape from a training aircraft',
+    },
+    'instrument-rating': {
+        hero: cockpitImg,
+        heroAlt: 'Instrument panel during IFR training flight',
+        support: heroPilotImg,
+        supportAlt: 'Pilot scanning instruments while flying in training',
+    },
+    'commercial-pilot': {
+        hero: piperArcherImg,
+        heroAlt: 'Piper aircraft used for advanced commercial training',
+        support: cessnaParkedImg,
+        supportAlt: 'Training aircraft parked on airport ramp at golden hour',
+    },
+    'multi-engine': {
+        hero: sunsetRunwayImg,
+        heroAlt: 'Runway environment at sunset before advanced operations',
+        support: hangarImg,
+        supportAlt:
+            'Aircraft maintenance hangar supporting multi-engine training',
+    },
+} as const;
+
+const media = mediaBySlug[program.slug as keyof typeof mediaBySlug];
+
+if (!media) {
+    throw new Error(`Program media not found: ${program.slug}`);
+}
+
+const courseSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    name: `${program.title} Program`,
+    description: program.detail,
+    provider: {
+        '@type': 'EducationalOrganization',
+        name: SITE.name,
+        url: SITE.url,
+    },
+    timeRequired: program.duration,
+    offers: {
+        '@type': 'Offer',
+        price: program.offerPriceUsd,
+        priceCurrency: 'USD',
+        availability: 'https://schema.org/InStock',
+    },
+};
+
+const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url },
+        {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Programs',
+            item: `${SITE.url}/#programs`,
+        },
+        {
+            '@type': 'ListItem',
+            position: 3,
+            name: program.title,
+            item: `${SITE.url}/programs/${program.slug}`,
+        },
+    ],
+};
+---
+
+<SiteLayout
+    title={`${program.title} Program | ${SITE.name}`}
+    description={`${program.title} training at ${SITE.name} in ${SITE.address.city}, ${SITE.address.state}. ${program.detail}`}
+>
+    <section class="relative min-h-[60vh] overflow-hidden">
+        <Image
+            src={media.hero}
+            alt={media.heroAlt}
+            class="absolute inset-0 h-full w-full object-cover"
+            widths={[800, 1200, 1600]}
+            sizes="100vw"
+            loading="eager"
+            fetchpriority="high"
+        />
+        <div
+            class="absolute inset-0 bg-linear-to-t from-black/70 via-black/35 to-black/15"
+        >
+        </div>
+        <div class="relative flex min-h-[60vh] items-end pb-16 lg:pb-24">
+            <Container>
+                <nav aria-label="Breadcrumb" class="mb-6" data-reveal="0">
+                    <ol
+                        class="text-inverse-muted flex items-center gap-2 font-sans text-xs"
+                    >
+                        <li>
+                            <a
+                                href="/"
+                                class="hover:text-accent transition-colors"
+                                >Home</a
+                            >
+                        </li>
+                        <li aria-hidden="true">/</li>
+                        <li>
+                            <a
+                                href="/#programs"
+                                class="hover:text-accent transition-colors"
+                                >Programs</a
+                            >
+                        </li>
+                        <li aria-hidden="true">/</li>
+                        <li class="text-inverse-muted">{program.title}</li>
+                    </ol>
+                </nav>
+                <h1
+                    class="text-inverse max-w-2xl font-serif text-4xl leading-tight sm:text-5xl lg:text-6xl"
+                    data-reveal="0.1"
+                >
+                    {program.title}
+                </h1>
+                <p
+                    class="text-inverse-muted mt-4 max-w-lg font-sans text-base leading-relaxed lg:text-lg"
+                    data-reveal="0.2"
+                >
+                    {program.tagline}
+                </p>
+                <div
+                    class="mt-8 flex flex-col gap-4 sm:flex-row"
+                    data-reveal="0.3"
+                >
+                    <Button
+                        href={`/?interest=program-details&program=${program.slug}&source=program-hero#contact`}
+                        variant="primary"
+                        size="lg"
+                    >
+                        Enroll now
+                    </Button>
+                </div>
+            </Container>
+        </div>
+    </section>
+
+    <section class="py-20 lg:py-28">
+        <Container>
+            <div class="grid grid-cols-1 gap-16 lg:grid-cols-3 lg:gap-24">
+                <div class="lg:col-span-2">
+                    <SectionLabel class="mb-4" data-reveal="0"
+                        >Program Overview</SectionLabel
+                    >
+                    <h2
+                        class="text-primary font-serif text-3xl tracking-tight lg:text-4xl"
+                        data-reveal="0.1"
+                    >
+                        {program.tagline}
+                    </h2>
+                    <div
+                        class="text-muted mt-8 space-y-6 font-sans text-sm leading-relaxed lg:text-base"
+                        data-reveal="0.15"
+                    >
+                        {
+                            program.overview.map((paragraph) => (
+                                <p>{paragraph}</p>
+                            ))
+                        }
+                    </div>
+
+                    <div class="mt-12" data-reveal="0.2">
+                        <ImageFrame>
+                            <Image
+                                src={cockpitImg}
+                                alt="Modern training cockpit with navigation instruments"
+                                class="aspect-video w-full object-cover"
+                                widths={[600, 900, 1200]}
+                                sizes="(max-width: 1024px) 100vw, 66vw"
+                                loading="lazy"
+                            />
+                        </ImageFrame>
+                    </div>
+
+                    <div class="mt-16">
+                        <SectionLabel class="mb-4" data-reveal="0"
+                            >Requirements</SectionLabel
+                        >
+                        <h2
+                            class="text-primary font-serif text-2xl tracking-tight lg:text-3xl"
+                            data-reveal="0.1"
+                        >
+                            What you need to get started
+                        </h2>
+                        <ul
+                            class="text-muted mt-6 space-y-4 font-sans text-sm leading-relaxed lg:text-base"
+                            data-reveal="0.15"
+                        >
+                            {
+                                program.requirements.map((requirement) => (
+                                    <li class="flex items-start gap-3">
+                                        <span class="bg-accent mt-1 block h-1.5 w-1.5 shrink-0 rounded-full" />
+                                        {requirement}
+                                    </li>
+                                ))
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+                <aside class="lg:sticky lg:top-32 lg:self-start">
+                    <SurfaceCard as="div" class="p-8">
+                        <h3
+                            class="tracking-label text-primary font-sans text-sm font-bold uppercase"
+                        >
+                            Program Details
+                        </h3>
+                        <dl class="mt-6 space-y-4">
+                            <div>
+                                <dt class="text-muted font-sans text-xs">
+                                    Duration
+                                </dt>
+                                <dd
+                                    class="text-primary mt-1 font-sans text-sm font-medium"
+                                >
+                                    {program.duration}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt class="text-muted font-sans text-xs">
+                                    Flight Hours
+                                </dt>
+                                <dd
+                                    class="text-primary mt-1 font-sans text-sm font-medium"
+                                >
+                                    {program.hours}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt class="text-muted font-sans text-xs">
+                                    Investment
+                                </dt>
+                                <dd
+                                    class="text-accent mt-1 font-sans text-sm font-medium"
+                                >
+                                    {program.price}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt class="text-muted font-sans text-xs">
+                                    Aircraft
+                                </dt>
+                                <dd
+                                    class="text-primary mt-1 font-sans text-sm font-medium"
+                                >
+                                    {program.aircraft}
+                                </dd>
+                            </div>
+                            <div>
+                                <dt class="text-muted font-sans text-xs">
+                                    Certification
+                                </dt>
+                                <dd
+                                    class="text-primary mt-1 font-sans text-sm font-medium"
+                                >
+                                    {program.certification}
+                                </dd>
+                            </div>
+                        </dl>
+                        <div class="mt-8">
+                            <Button
+                                href={`/?interest=program-details&program=${program.slug}&source=program-sidebar#contact`}
+                                variant="primary"
+                                size="md"
+                                fullWidth
+                            >
+                                Enroll now
+                            </Button>
+                        </div>
+                    </SurfaceCard>
+
+                    <SurfaceCard
+                        as="div"
+                        class="border-line-accent-soft bg-accent-soft mt-6 p-8"
+                    >
+                        <h3
+                            class="tracking-label text-primary font-sans text-sm font-bold uppercase"
+                        >
+                            Not sure yet?
+                        </h3>
+                        <p
+                            class="text-muted mt-3 font-sans text-sm leading-relaxed"
+                        >
+                            Book a discovery flight and experience flying
+                            firsthand. 30 minutes, no commitment.
+                        </p>
+                        <div class="mt-6">
+                            <Button
+                                href={`/?interest=discovery-flight&program=${program.slug}&source=program-sidebar#contact`}
+                                variant="outline"
+                                size="md"
+                                fullWidth
+                            >
+                                Book a Discovery Flight
+                            </Button>
+                        </div>
+                    </SurfaceCard>
+                </aside>
+            </div>
+        </Container>
+    </section>
+
+    <section class="bg-surface-soft py-20 lg:py-28">
+        <Container>
+            <SectionLabel class="mb-4" data-reveal="0"
+                >Your Training Path</SectionLabel
+            >
+            <h2
+                class="text-primary max-w-lg font-serif text-3xl tracking-tight lg:text-4xl"
+                data-reveal="0.1"
+            >
+                Six steps to your {program.title}
+            </h2>
+
+            <div class="mt-16 grid grid-cols-1 gap-12 md:grid-cols-2 lg:gap-16">
+                {
+                    program.steps.map((step, i) => (
+                        <div
+                            class="relative pl-16"
+                            data-reveal={String(i * 0.1)}
+                        >
+                            <span class="text-accent-faint absolute top-0 left-0 font-sans text-4xl font-bold">
+                                {step.num}
+                            </span>
+                            <h3 class="text-primary font-sans text-base font-bold">
+                                {step.title}
+                            </h3>
+                            <p class="text-muted mt-2 font-sans text-sm leading-relaxed">
+                                {step.text}
+                            </p>
+                        </div>
+                    ))
+                }
+            </div>
+
+            <div class="mt-16" data-reveal="0">
+                <ImageFrame>
+                    <Image
+                        src={media.support}
+                        alt={media.supportAlt}
+                        class="aspect-21/9 w-full object-cover"
+                        widths={[800, 1200, 1600]}
+                        sizes="100vw"
+                        loading="lazy"
+                    />
+                </ImageFrame>
+            </div>
+        </Container>
+    </section>
+
+    <section class="py-20 lg:py-28">
+        <Container>
+            <SectionLabel class="mb-4" data-reveal="0"
+                >Related Programs</SectionLabel
+            >
+            <div class="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2">
+                {
+                    relatedPrograms.map((item, i) => (
+                        <SurfaceCard
+                            class="relative p-6"
+                            data-reveal={String(i * 0.08)}
+                        >
+                            <p class="tracking-label text-muted font-sans text-[10px] font-semibold uppercase">
+                                Program {item.num}
+                            </p>
+                            <h3 class="text-primary mt-3 font-serif text-3xl leading-tight">
+                                {item.title}
+                            </h3>
+                            <p class="text-muted mt-2 font-sans text-sm">
+                                {item.tagline}
+                            </p>
+                            <p class="text-muted mt-4 font-sans text-sm leading-relaxed">
+                                {item.detail}
+                            </p>
+
+                            <div class="tracking-label mt-5 flex flex-wrap items-center gap-3 text-[10px] font-semibold uppercase">
+                                <span class="bg-overlay-soft text-muted rounded-full px-3 py-1">
+                                    {item.duration}
+                                </span>
+                                <span class="bg-overlay-soft text-muted rounded-full px-3 py-1">
+                                    {item.hours}
+                                </span>
+                                <span class="bg-accent-soft text-accent rounded-full px-3 py-1">
+                                    {item.price}
+                                </span>
+                            </div>
+
+                            <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+                                <a
+                                    href={`/programs/${item.slug}`}
+                                    class="tracking-label text-primary hover:text-accent inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase transition-colors"
+                                >
+                                    View details{' '}
+                                    <span aria-hidden="true">→</span>
+                                </a>
+                                <a
+                                    href={`/?interest=program-details&program=${item.slug}&source=program-related-card#contact`}
+                                    class="tracking-label bg-accent text-inverse hover:bg-accent-strong shadow-var(--shadow-s) inline-flex items-center gap-2 rounded-full px-4 py-2 font-sans text-xs font-semibold uppercase transition-colors"
+                                >
+                                    Enroll now
+                                </a>
+                            </div>
+                        </SurfaceCard>
+                    ))
+                }
+            </div>
+        </Container>
+    </section>
+
+    <CtaBanner />
+    <Faq />
+    <JsonLd data={courseSchema} />
+    <JsonLd data={breadcrumbSchema} />
+</SiteLayout>

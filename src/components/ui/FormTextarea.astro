@@ -1,0 +1,60 @@
+---
+import { cn } from '../../lib/ui/cn';
+
+interface Props {
+    name: string;
+    id?: string;
+    label?: string;
+    placeholder: string;
+    required?: boolean;
+    rows?: number;
+    class?: string;
+}
+
+const {
+    name,
+    id,
+    label,
+    placeholder,
+    required = false,
+    rows: rawRows,
+    class: className = '',
+} = Astro.props as Props;
+
+const inputId = typeof id === 'string' && id.length > 0 ? id : name;
+const rows = typeof rawRows === 'number' && rawRows > 0 ? rawRows : 4;
+const inputClasses =
+    'w-full border-b border-line-soft bg-transparent py-3 font-sans text-sm text-primary placeholder:text-muted focus:border-primary focus:outline-none';
+---
+
+{
+    label ? (
+        <div class="space-y-2">
+            <label
+                for={inputId}
+                class="tracking-label text-muted font-sans text-[10px] font-semibold uppercase"
+            >
+                {label}
+            </label>
+            <textarea
+                id={inputId}
+                name={name}
+                placeholder={placeholder}
+                aria-label={label}
+                rows={rows}
+                required={required}
+                class={cn(inputClasses, 'resize-none', className)}
+            />
+        </div>
+    ) : (
+        <textarea
+            id={inputId}
+            name={name}
+            placeholder={placeholder}
+            aria-label={placeholder}
+            rows={rows}
+            required={required}
+            class={cn(inputClasses, 'resize-none', className)}
+        />
+    )
+}

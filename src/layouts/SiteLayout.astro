@@ -1,0 +1,30 @@
+---
+import Layout from './Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+    title?: string;
+    description?: string;
+    ogImage?: string;
+    canonical?: string;
+    pathname?: string;
+    noIndex?: boolean;
+}
+
+const rawProps = Astro.props as Partial<Props>;
+const pathname =
+    typeof rawProps.pathname === 'string' && rawProps.pathname.length > 0
+        ? rawProps.pathname
+        : Astro.url.pathname;
+const { pathname: _pathname, ...layoutProps } = rawProps;
+---
+
+<Layout {...layoutProps}>
+    <slot name="head" slot="head" />
+    <Navbar pathname={pathname} />
+    <main id="main-content">
+        <slot />
+    </main>
+    <Footer />
+</Layout>

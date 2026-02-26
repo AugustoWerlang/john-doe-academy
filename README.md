@@ -1,46 +1,32 @@
-# Astro Starter Kit: Basics
+# John Doe Academy Demo
 
-```sh
-npm create astro@latest -- --template basics
-```
+Simple Astro flight academy demo site.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Live demo
 
-## 🚀 Project Structure
+https://fly.codename.com.br
 
-Inside of your Astro project, you'll see the following folders and files:
+## Screenshots
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+![Homepage hero section](docs/hero.png)
+![Lighthouse report with 100 scores](docs/lighthouse.png)
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Technologies used
 
-## 🧞 Commands
+- Astro 5
+- Tailwind CSS 4
+- Astro Content Collections
+- Astro Sitemap
 
-All commands are run from the root of the project, from a terminal:
+## Commands
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+- `npm install` - install dependencies
+- `npm run dev` - run dev server
+- `npm run build` - build for production
+- `npm run preview` - preview production build
+- `npm run lint` - run linter
 
-## 👀 Want to learn more?
+## Notes
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- Brand and contact data are demo-only (`John Doe Academy`)
+- Contact form is frontend-only (no real CRM/webhook integration)

@@ -1,0 +1,260 @@
+---
+import { Image } from 'astro:assets';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Container from '../components/ui/Container.astro';
+import SectionLabel from '../components/ui/SectionLabel.astro';
+import ImageFrame from '../components/ui/ImageFrame.astro';
+import SurfaceCard from '../components/ui/SurfaceCard.astro';
+import hangarImg from '../assets/images/hangar.jpg';
+import sunsetImg from '../assets/images/sunset-runway.jpg';
+import person1 from '../assets/images/person-1.jpg';
+import person2 from '../assets/images/person-2.jpg';
+import person3 from '../assets/images/person-3.jpg';
+import CtaBanner from '../components/CtaBanner.astro';
+import Faq from '../components/Faq.astro';
+
+const team = [
+    {
+        name: 'Captain David Torres',
+        role: 'Chief Flight Instructor',
+        bio: '12,000+ hours. Former regional airline captain. ATP, CFI/CFII/MEI. David founded John Doe Academy with the mission to build the flight school he wished existed when he started.',
+        image: person1,
+    },
+    {
+        name: 'Sarah Kim',
+        role: 'Assistant Chief Instructor',
+        bio: "6,000+ hours. Former Part 135 charter pilot. Instrument and multi-engine specialist. Sarah's calm demeanor and structured approach make her a student favorite.",
+        image: person2,
+    },
+    {
+        name: 'Marcus Rivera',
+        role: 'Flight Instructor / CFI-I',
+        bio: '2,500+ hours. Instrument rated flight instructor with a background in aerobatics. Marcus brings energy and precision to every lesson, from first flights to checkride prep.',
+        image: person3,
+    },
+];
+---
+
+<SiteLayout
+    title="About Us | John Doe Academy Austin TX"
+    description="Meet the team behind John Doe Academy. Experienced FAA-certified instructors, modern facilities, and a mission to build confident, safe pilots in Austin, Texas."
+>
+    <section class="pt-20 pb-16 lg:pt-24 lg:pb-24">
+        <Container>
+            <nav aria-label="Breadcrumb" class="mb-8" data-reveal="0">
+                <ol
+                    class="text-muted flex items-center gap-2 font-sans text-xs"
+                >
+                    <li>
+                        <a href="/" class="hover:text-accent transition-colors"
+                            >Home</a
+                        >
+                    </li>
+                    <li aria-hidden="true">/</li>
+                    <li class="text-muted">About</li>
+                </ol>
+            </nav>
+
+            <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-24">
+                <div data-reveal="0.1">
+                    <SectionLabel class="mb-4">Our Story</SectionLabel>
+                    <h1
+                        class="text-primary font-serif text-4xl leading-tight tracking-tight lg:text-5xl"
+                    >
+                        Built by pilots, for the people who want to become one
+                    </h1>
+                    <div
+                        class="text-muted mt-8 space-y-5 font-sans text-sm leading-relaxed lg:text-base"
+                    >
+                        <p>
+                            John Doe Academy was founded in 2005 by Captain
+                            David Torres after a 15-year airline career. The
+                            idea was simple: build the flight school he wished
+                            had existed when he was learning to fly — one that
+                            combined professional-grade training with genuine
+                            care for each student's individual journey.
+                        </p>
+                        <p>
+                            Two decades later, that mission hasn't changed.
+                            We've trained hundreds of pilots — from weekend
+                            flyers who just wanted to see their city from above,
+                            to career-track students who are now captains at
+                            regional and major airlines.
+                        </p>
+                        <p>
+                            What makes John Doe Academy different isn't our
+                            fleet or our facilities (though we're proud of
+                            both). It's our instructors. Every CFI at John Doe
+                            Academy teaches because they love it — not because
+                            they're building hours on the way to somewhere else.
+                            That philosophy shows in our completion rates, our
+                            checkride pass rates, and the community our students
+                            build here.
+                        </p>
+                    </div>
+                </div>
+                <div data-reveal="0.2">
+                    <ImageFrame>
+                        <Image
+                            src={hangarImg}
+                            alt="John Doe Academy facility and hangar"
+                            class="aspect-4/5 w-full object-cover"
+                            widths={[400, 600, 800]}
+                            sizes="(max-width: 1024px) 100vw, 50vw"
+                            loading="eager"
+                        />
+                    </ImageFrame>
+                </div>
+            </div>
+        </Container>
+    </section>
+
+    <section class="py-20 lg:py-28">
+        <Container>
+            <div
+                class="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8"
+                data-reveal="0"
+            >
+                <SurfaceCard as="div" class="p-6 text-center lg:p-8">
+                    <p class="text-primary font-serif text-4xl lg:text-5xl">
+                        20+
+                    </p>
+                    <p
+                        class="tracking-label text-muted mt-2 font-sans text-[10px] font-semibold uppercase"
+                    >
+                        Years Operating
+                    </p>
+                </SurfaceCard>
+                <SurfaceCard as="div" class="p-6 text-center lg:p-8">
+                    <p class="text-primary font-serif text-4xl lg:text-5xl">
+                        500+
+                    </p>
+                    <p
+                        class="tracking-label text-muted mt-2 font-sans text-[10px] font-semibold uppercase"
+                    >
+                        Pilots Trained
+                    </p>
+                </SurfaceCard>
+                <SurfaceCard as="div" class="p-6 text-center lg:p-8">
+                    <p class="text-primary font-serif text-4xl lg:text-5xl">
+                        95%
+                    </p>
+                    <p
+                        class="tracking-label text-muted mt-2 font-sans text-[10px] font-semibold uppercase"
+                    >
+                        Checkride Pass Rate
+                    </p>
+                </SurfaceCard>
+                <SurfaceCard as="div" class="p-6 text-center lg:p-8">
+                    <p class="text-primary font-serif text-4xl lg:text-5xl">
+                        6
+                    </p>
+                    <p
+                        class="tracking-label text-muted mt-2 font-sans text-[10px] font-semibold uppercase"
+                    >
+                        Aircraft in Fleet
+                    </p>
+                </SurfaceCard>
+            </div>
+        </Container>
+    </section>
+
+    <section class="py-20 lg:py-28">
+        <Container>
+            <SectionLabel class="mb-4" data-reveal="0">Our Team</SectionLabel>
+            <h2
+                class="text-primary max-w-lg font-serif text-3xl tracking-tight lg:text-4xl"
+                data-reveal="0.1"
+            >
+                Meet the instructors who'll teach you to fly
+            </h2>
+
+            <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+                {
+                    team.map((member, i) => (
+                        <SurfaceCard data-reveal={String(i * 0.15)}>
+                            <div class="relative aspect-5/4 w-full overflow-hidden">
+                                <Image
+                                    src={member.image}
+                                    alt={member.name}
+                                    class="h-full w-full object-cover"
+                                    widths={[320, 480, 640]}
+                                    sizes="(max-width: 768px) 100vw, 33vw"
+                                    loading="lazy"
+                                />
+                                <p class="bg-surface-soft tracking-label text-accent absolute top-4 left-4 rounded-full px-3 py-1 font-sans text-[10px] font-semibold uppercase">
+                                    {member.role}
+                                </p>
+                            </div>
+                            <div class="px-5 pt-5 pb-6">
+                                <h3 class="text-primary font-serif text-2xl leading-tight">
+                                    {member.name}
+                                </h3>
+                                <p class="border-line-soft text-muted mt-4 border-t pt-4 font-sans text-sm leading-relaxed">
+                                    {member.bio}
+                                </p>
+                            </div>
+                        </SurfaceCard>
+                    ))
+                }
+            </div>
+        </Container>
+    </section>
+
+    <section class="py-20 lg:py-28">
+        <Container>
+            <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-24">
+                <div data-reveal="0">
+                    <SectionLabel class="mb-4">Our Facilities</SectionLabel>
+                    <h2
+                        class="text-primary font-serif text-3xl tracking-tight lg:text-4xl"
+                    >
+                        A training environment built for focus
+                    </h2>
+                </div>
+                <div
+                    class="text-muted space-y-5 font-sans text-sm leading-relaxed lg:text-base"
+                    data-reveal="0.15"
+                >
+                    <p>
+                        Located at Austin-Bergstrom area's general aviation
+                        facilities, John Doe Academy operates from a modern
+                        hangar with dedicated briefing rooms, a student lounge,
+                        and direct ramp access. Our aircraft are housed on-site
+                        — no shuttles, no waiting.
+                    </p>
+                    <p>
+                        The briefing rooms are equipped for ground instruction
+                        and flight planning, with access to current weather
+                        data, NOTAMs, and digital chart overlays. We believe the
+                        environment where you learn matters as much as how you
+                        learn.
+                    </p>
+                    <p>
+                        Austin's airspace is ideal for training: Class B
+                        experience at KAUS, towered and non-towered fields
+                        within 30 minutes, and varied terrain from flat prairie
+                        to Hill Country that builds genuine cross-country
+                        skills.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-12" data-reveal="0.1">
+                <ImageFrame>
+                    <Image
+                        src={sunsetImg}
+                        alt="Flight instructors and students in a briefing session"
+                        class="aspect-21/9 w-full object-cover"
+                        widths={[800, 1200, 1600]}
+                        sizes="100vw"
+                        loading="lazy"
+                    />
+                </ImageFrame>
+            </div>
+        </Container>
+    </section>
+
+    <CtaBanner />
+    <Faq />
+</SiteLayout>

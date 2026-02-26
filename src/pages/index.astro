@@ -1,11 +1,54 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Hero from '../components/Hero.astro';
+import Programs from '../components/Programs.astro';
+import WhyUs from '../components/WhyUs.astro';
+import Fleet from '../components/Fleet.astro';
+import Faq from '../components/Faq.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import ContactForm from '../components/ContactForm.astro';
+import JsonLd from '../components/ui/JsonLd.astro';
+import { SITE } from '../data/siteConfig';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const localBusinessSchema = {
+    '@context': 'https://schema.org',
+    '@type': ['LocalBusiness', 'EducationalOrganization'],
+    name: SITE.name,
+    description: `${SITE.name} offers FAA-certified pilot training in ${SITE.address.city}, ${SITE.address.state}. Discovery flights, private pilot, instrument rating, and commercial licenses.`,
+    url: SITE.url,
+    telephone: SITE.phone,
+    email: SITE.email,
+    address: {
+        '@type': 'PostalAddress',
+        streetAddress: SITE.address.street,
+        addressLocality: SITE.address.city,
+        addressRegion: SITE.address.state,
+        postalCode: SITE.address.zip,
+        addressCountry: 'US',
+    },
+    geo: {
+        '@type': 'GeoCoordinates',
+        latitude: 30.2,
+        longitude: -97.67,
+    },
+    openingHours: ['Mo-Fr 09:00-17:00'],
+    sameAs: [
+        SITE.social.instagram,
+        SITE.social.facebook,
+        SITE.social.youtube,
+        SITE.social.tiktok,
+    ],
+    priceRange: '$$',
+};
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<SiteLayout>
+    <Hero />
+    <Programs />
+    <WhyUs />
+    <Fleet />
+    <Faq />
+    <CtaBanner />
+    <ContactForm />
+    <JsonLd data={localBusinessSchema} />
+</SiteLayout>

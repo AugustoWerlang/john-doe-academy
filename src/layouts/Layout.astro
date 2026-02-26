@@ -1,23 +1,212 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '../styles/global.css';
+import { SITE } from '../data/siteConfig';
+
+interface Props {
+    title?: string;
+    description?: string;
+    ogImage?: string;
+    canonical?: string;
+    noIndex?: boolean;
+}
+
+const {
+    title = `${SITE.name} | Flight School in Austin TX`,
+    description = `${SITE.name} offers FAA-certified pilot training in Austin, Texas. From discovery flights to commercial licenses, start your journey to the skies.`,
+    ogImage = '/og-image.svg',
+    canonical: rawCanonical,
+    noIndex = false,
+} = Astro.props as Props;
+
+const canonical =
+    typeof rawCanonical === 'string' && rawCanonical.length > 0
+        ? rawCanonical
+        : null;
+
+const canonicalUrl = canonical
+    ? new URL(canonical, SITE.url).toString()
+    : Astro.url.href;
+const ogImageUrl = new URL(ogImage, SITE.url).toString();
+const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE.name,
+    url: SITE.url,
+};
+---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="generator" content={Astro.generator} />
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta
+            name="robots"
+            content={noIndex ? 'noindex, nofollow' : 'index, follow'}
+        />
+        <meta name="theme-color" content="#f5f0e8" />
+
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content={ogImageUrl} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:site_name" content={SITE.name} />
+        <meta property="og:locale" content="en_US" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImageUrl} />
+
+        <meta name="geo.region" content="US-TX" />
+        <meta name="geo.placename" content="Austin" />
+
+        <ClientRouter />
+
+        <script
+            type="application/ld+json"
+            is:inline
+            set:html={JSON.stringify(websiteSchema)}
+        />
+        <slot name="head" />
+    </head>
+    <body>
+        <a
+            href="#main-content"
+            class="focus:bg-accent focus:text-inverse sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:text-sm"
+        >
+            Skip to content
+        </a>
+
+        <div id="nav-sentinel" class="absolute top-0 h-1 w-full"></div>
+
+        <slot />
+
+        <script>
+            const initNavObserver = () => {
+                const sentinel = document.getElementById('nav-sentinel');
+                const nav = document.getElementById('main-nav');
+                if (
+                    !sentinel ||
+                    !nav ||
+                    nav.dataset.scrollObserverBound === 'true'
+                )
+                    return;
+
+                const observer = new IntersectionObserver(
+                    ([entry]) => {
+                        nav.classList.toggle(
+                            'nav-scrolled',
+                            !entry.isIntersecting,
+                        );
+                    },
+                    { threshold: 0 },
+                );
+
+                observer.observe(sentinel);
+                nav.dataset.scrollObserverBound = 'true';
+            };
+
+            const revealElements = () => {
+                const revealObserver = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            if (!entry.isIntersecting) return;
+                            const el = entry.target;
+                            if (!(el instanceof HTMLElement)) return;
+
+                            const delayValue = el.dataset.reveal;
+                            const delay =
+                                typeof delayValue === 'string'
+                                    ? delayValue
+                                    : '0';
+                            el.style.animationDelay = `${delay}s`;
+                            el.classList.add('revealed');
+                            revealObserver.unobserve(el);
+                        });
+                    },
+                    { threshold: 0.1 },
+                );
+
+                document
+                    .querySelectorAll('[data-reveal]:not(.revealed)')
+                    .forEach((el) => revealObserver.observe(el));
+            };
+
+            const initParallax = () => {
+                if (
+                    window.matchMedia('(prefers-reduced-motion: reduce)')
+                        .matches
+                )
+                    return;
+                const parallaxEls = Array.from(
+                    document.querySelectorAll('[data-parallax]'),
+                );
+                if (!parallaxEls.length) return;
+
+                let rafId = 0;
+
+                const run = () => {
+                    const viewportHeight = window.innerHeight;
+                    parallaxEls.forEach((node) => {
+                        if (!(node instanceof HTMLElement)) return;
+                        const rect = node.getBoundingClientRect();
+                        if (rect.bottom < 0 || rect.top > viewportHeight)
+                            return;
+
+                        const parallaxValue = node.dataset.parallax;
+                        const speed = Number(
+                            typeof parallaxValue === 'string'
+                                ? parallaxValue
+                                : '0.14',
+                        );
+                        const centerOffset =
+                            rect.top + rect.height / 2 - viewportHeight / 2;
+                        const movement = -(centerOffset * speed);
+                        node.style.transform = `translate3d(0, ${movement.toFixed(2)}px, 0)`;
+                    });
+                    rafId = 0;
+                };
+
+                const request = () => {
+                    if (rafId !== 0) return;
+                    rafId = window.requestAnimationFrame(run);
+                };
+
+                request();
+
+                if (document.body.dataset.parallaxBound !== 'true') {
+                    window.addEventListener('scroll', request, {
+                        passive: true,
+                    });
+                    window.addEventListener('resize', request, {
+                        passive: true,
+                    });
+                    document.body.dataset.parallaxBound = 'true';
+                }
+            };
+
+            const initEnhancements = () => {
+                initNavObserver();
+                revealElements();
+                initParallax();
+            };
+
+            initEnhancements();
+
+            if (document.body.dataset.enhancementsBound !== 'true') {
+                document.addEventListener('astro:after-swap', initEnhancements);
+                document.body.dataset.enhancementsBound = 'true';
+            }
+        </script>
+    </body>
+</html>

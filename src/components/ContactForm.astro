@@ -1,0 +1,567 @@
+---
+import { SITE } from '../data/siteConfig';
+import SectionLabel from './ui/SectionLabel.astro';
+import Button from './ui/Button.astro';
+import FormInput from './ui/FormInput.astro';
+import FormTextarea from './ui/FormTextarea.astro';
+import Container from './ui/Container.astro';
+---
+
+<section id="contact" class="py-20 lg:py-28">
+    <Container>
+        <div class="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-24">
+            <div data-reveal="0">
+                <SectionLabel class="mb-10">Enrollment</SectionLabel>
+                <h2
+                    class="text-primary mb-6 font-serif text-4xl leading-tight tracking-tight lg:text-5xl"
+                >
+                    Start your enrollment.
+                </h2>
+                <div
+                    class="border-line-soft bg-surface-soft shadow-var(--shadow-s) rounded-2xl border p-6 sm:p-7"
+                >
+                    <form
+                        id="contact-form"
+                        class="flex flex-col gap-6"
+                        data-form-type="enrollment-lead"
+                        novalidate
+                    >
+                        <input
+                            type="hidden"
+                            name="campaign"
+                            value="website-enrollment-lead"
+                        />
+                        <input type="hidden" name="source" value="website" />
+                        <input type="hidden" name="program" value="" />
+                        <input
+                            type="text"
+                            name="confirm-email"
+                            class="hidden"
+                            tabindex="-1"
+                            autocomplete="off"
+                            aria-hidden="true"
+                        />
+                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            <FormInput
+                                id="first_name"
+                                name="first_name"
+                                label="First Name"
+                                placeholder="First Name"
+                                required
+                            />
+                            <FormInput
+                                id="last_name"
+                                name="last_name"
+                                label="Last Name"
+                                placeholder="Last Name"
+                                required
+                            />
+                        </div>
+                        <FormInput
+                            id="email"
+                            name="email"
+                            label="Email"
+                            type="email"
+                            placeholder="Email"
+                            required
+                        />
+                        <FormInput
+                            id="phone"
+                            name="phone"
+                            label="Phone"
+                            type="tel"
+                            placeholder="Phone"
+                        />
+                        <div class="space-y-2">
+                            <label
+                                for="interest"
+                                class="tracking-label text-muted font-sans text-[10px] font-semibold uppercase"
+                            >
+                                I want to enroll in
+                            </label>
+                            <select
+                                id="interest"
+                                name="interest"
+                                required
+                                class="border-line-soft text-primary focus:border-primary w-full border-b bg-transparent py-3 font-sans text-sm focus:outline-none"
+                            >
+                                <option value="discovery-flight"
+                                    >Discovery Flight</option
+                                >
+                                <option value="private-pilot"
+                                    >Private Pilot Program</option
+                                >
+                                <option value="instrument-rating"
+                                    >Instrument Rating</option
+                                >
+                                <option value="commercial-pilot"
+                                    >Commercial Pilot Program</option
+                                >
+                                <option value="multi-engine"
+                                    >Multi-Engine Rating</option
+                                >
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <FormTextarea
+                                id="message"
+                                name="message"
+                                label="Enrollment Notes"
+                                placeholder="Tell us your timeline and availability..."
+                                rows={4}
+                            />
+                            <p
+                                id="message-counter"
+                                class="text-muted font-sans text-[10px]"
+                            >
+                                0 / 600
+                            </p>
+                        </div>
+                        <Button
+                            type="submit"
+                            variant="primary"
+                            size="lg"
+                            fullWidth
+                        >
+                            <span
+                                id="submit-loader"
+                                class="submit-loader hidden"
+                                aria-hidden="true"
+                            >
+                                <span class="submit-loader-runway"></span>
+                                <span class="submit-loader-plane">✈</span>
+                                <span
+                                    class="submit-loader-plane submit-loader-plane-alt"
+                                    >✈</span
+                                >
+                            </span>
+                            <span id="submit-label"
+                                >Send Enrollment Request</span
+                            >
+                        </Button>
+                        <p
+                            id="form-status"
+                            class="hidden rounded-xl px-4 py-3 font-sans text-sm"
+                            role="status"
+                            aria-live="polite"
+                        >
+                        </p>
+                    </form>
+                </div>
+            </div>
+
+            <div data-reveal="0.15">
+                <SectionLabel class="mb-10">Visit Us</SectionLabel>
+                <div
+                    class="text-muted flex flex-col gap-6 font-sans text-sm leading-relaxed"
+                >
+                    <div>
+                        <p class="text-primary font-medium">{SITE.name}</p>
+                        <p>{SITE.address.street}</p>
+                        <p>
+                            {SITE.address.city}, {SITE.address.state}
+                            {SITE.address.zip}
+                        </p>
+                    </div>
+                    <div>
+                        <a
+                            href={`tel:${SITE.phoneRaw}`}
+                            class="text-primary hover:text-accent transition-colors"
+                        >
+                            {SITE.phone}
+                        </a>
+                        <p>
+                            <a
+                                href={`mailto:${SITE.email}`}
+                                class="text-muted hover:text-accent transition-colors"
+                            >
+                                {SITE.email}
+                            </a>
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-muted">{SITE.hours.weekdays}</p>
+                        <p class="text-muted">{SITE.hours.weekends}</p>
+                    </div>
+                </div>
+
+                <div
+                    class="border-line-soft bg-surface-soft shadow-var(--shadow-s) mt-10 aspect-4/3 w-full overflow-hidden rounded-2xl border p-1.5 sm:p-2"
+                >
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3447.5!2d-97.67!3d30.20!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDEyJzAwLjAiTiA5N8KwNDAnMTIuMCJX!5e0!3m2!1sen!2sus!4v1"
+                        width="100%"
+                        height="100%"
+                        style="border:0;"
+                        allowfullscreen={false}
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title={`Map showing location of ${SITE.name}`}
+                        class="rounded-[0.8rem] mix-blend-multiply"></iframe>
+                </div>
+            </div>
+        </div>
+    </Container>
+</section>
+
+<div
+    id="contact-success-modal"
+    class="fixed inset-0 z-90 hidden items-center justify-center p-6"
+    aria-hidden="true"
+>
+    <button
+        id="contact-success-backdrop"
+        type="button"
+        class="bg-overlay-strong absolute inset-0 backdrop-blur-[2px]"
+        aria-label="Close success message"></button>
+    <div
+        class="border-line-soft bg-surface-soft shadow-var(--shadow-l) relative z-10 w-full max-w-md rounded-2xl border p-7"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="contact-success-title"
+        aria-describedby="contact-success-description"
+    >
+        <p
+            class="tracking-label text-success font-sans text-[10px] font-semibold uppercase"
+        >
+            Enrollment request sent
+        </p>
+        <h3
+            id="contact-success-title"
+            class="text-primary mt-2 font-serif text-3xl leading-tight"
+        >
+            You are on the enrollment list.
+        </h3>
+        <p
+            id="contact-success-description"
+            class="text-muted mt-3 font-sans text-sm leading-relaxed"
+        >
+            We received your request. An enrollment advisor will contact you
+            shortly.
+        </p>
+        <button
+            id="contact-success-close"
+            type="button"
+            class="bg-primary tracking-label text-inverse hover:bg-accent mt-6 w-full rounded-full px-5 py-3 font-sans text-xs font-semibold uppercase transition-colors"
+        >
+            Back to form
+        </button>
+    </div>
+</div>
+
+<script>
+    function initContactForm() {
+        const form = document.getElementById(
+            'contact-form',
+        ) as HTMLFormElement | null;
+        if (!form || form.dataset.bound === 'true') return;
+        form.dataset.bound = 'true';
+
+        const submitBtn = form.querySelector(
+            'button[type=submit]',
+        ) as HTMLButtonElement | null;
+        const submitLabel = document.getElementById('submit-label');
+        const submitLoader = document.getElementById('submit-loader');
+        const statusEl = document.getElementById('form-status');
+        const successModal = document.getElementById('contact-success-modal');
+        const successModalBackdrop = document.getElementById(
+            'contact-success-backdrop',
+        );
+        const successModalClose = document.getElementById(
+            'contact-success-close',
+        );
+        const messageField = form.elements.namedItem(
+            'message',
+        ) as HTMLTextAreaElement | null;
+        const messageCounter = document.getElementById('message-counter');
+        const interestField = form.elements.namedItem(
+            'interest',
+        ) as HTMLSelectElement | null;
+        const sourceField = form.elements.namedItem(
+            'source',
+        ) as HTMLInputElement | null;
+        const programField = form.elements.namedItem(
+            'program',
+        ) as HTMLInputElement | null;
+        let previousFocusedElement: HTMLElement | null = null;
+
+        if (
+            !submitBtn ||
+            !submitLabel ||
+            !submitLoader ||
+            !statusEl ||
+            !successModal ||
+            !successModalBackdrop ||
+            !successModalClose ||
+            !messageCounter ||
+            !interestField ||
+            !sourceField ||
+            !programField
+        )
+            return;
+
+        const interestLabels: Record<string, string> = {
+            'discovery-flight': 'Discovery Flight',
+            'private-pilot': 'Private Pilot Program',
+            'instrument-rating': 'Instrument Rating',
+            'commercial-pilot': 'Commercial Pilot Program',
+            'multi-engine': 'Multi-Engine Rating',
+        };
+
+        const getParamValue = (params: URLSearchParams, key: string) => {
+            const value = params.get(key);
+            if (typeof value !== 'string') return '';
+            return value.trim();
+        };
+
+        const getFormValue = (data: FormData, key: string) => {
+            const value = data.get(key);
+            if (typeof value !== 'string') return '';
+            return value.trim();
+        };
+
+        const resolveInterest = (params: URLSearchParams) => {
+            const rawInterest = getParamValue(params, 'interest');
+            const rawProgram = getParamValue(params, 'program');
+            if (rawInterest in interestLabels) return rawInterest;
+            if (
+                rawInterest === 'program-details' &&
+                rawProgram in interestLabels
+            )
+                return rawProgram;
+            if (rawProgram in interestLabels) return rawProgram;
+            return 'private-pilot';
+        };
+
+        const setStatus = (text: string, variant: 'loading' | 'error') => {
+            statusEl.classList.remove(
+                'hidden',
+                'bg-danger-soft',
+                'text-danger',
+                'bg-overlay-soft',
+                'text-muted',
+                'bg-success-soft',
+                'text-success',
+            );
+            if (variant === 'loading')
+                statusEl.classList.add('bg-overlay-soft', 'text-muted');
+            if (variant === 'error')
+                statusEl.classList.add('bg-danger-soft', 'text-danger');
+            statusEl.textContent = text;
+        };
+
+        const setLoading = (isLoading: boolean) => {
+            const controls = Array.from(
+                form.querySelectorAll('input, select, textarea, button'),
+            ) as Array<
+                | HTMLInputElement
+                | HTMLSelectElement
+                | HTMLTextAreaElement
+                | HTMLButtonElement
+            >;
+            controls.forEach((control) => {
+                if (control.name === 'confirm-email') return;
+                control.disabled = isLoading;
+            });
+            submitLoader.classList.toggle('hidden', !isLoading);
+            submitLoader.classList.toggle('submit-loader-active', isLoading);
+            submitLabel.textContent = isLoading
+                ? 'Submitting your enrollment request...'
+                : 'Send Enrollment Request';
+        };
+
+        const openSuccessModal = () => {
+            previousFocusedElement =
+                document.activeElement instanceof HTMLElement
+                    ? document.activeElement
+                    : null;
+            successModal.classList.remove('hidden');
+            successModal.classList.add('flex');
+            successModal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            successModalClose.focus();
+        };
+
+        const closeSuccessModal = () => {
+            successModal.classList.add('hidden');
+            successModal.classList.remove('flex');
+            successModal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            if (previousFocusedElement && previousFocusedElement.isConnected) {
+                previousFocusedElement.focus();
+            } else {
+                interestField.focus();
+            }
+            previousFocusedElement = null;
+        };
+
+        const trapModalFocus = (event: KeyboardEvent) => {
+            if (
+                successModal.classList.contains('hidden') ||
+                event.key !== 'Tab'
+            )
+                return;
+
+            const selectors =
+                'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+            const focusableEls = Array.from(
+                successModal.querySelectorAll(selectors),
+            ).filter(
+                (el): el is HTMLElement =>
+                    el instanceof HTMLElement &&
+                    !el.hasAttribute('disabled') &&
+                    !el.hasAttribute('hidden') &&
+                    el.getAttribute('aria-hidden') !== 'true',
+            );
+
+            if (!focusableEls.length) {
+                event.preventDefault();
+                return;
+            }
+
+            const first = focusableEls[0];
+            const last = focusableEls[focusableEls.length - 1];
+            const activeElement = document.activeElement;
+
+            if (event.shiftKey) {
+                if (
+                    activeElement === first ||
+                    !successModal.contains(activeElement)
+                ) {
+                    event.preventDefault();
+                    last.focus();
+                }
+                return;
+            }
+
+            if (activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const selectedInterest = resolveInterest(params);
+        const sourceValue = getParamValue(params, 'source');
+        const source = sourceValue.length > 0 ? sourceValue : 'website';
+        const selectedProgram = getParamValue(params, 'program');
+        interestField.value = selectedInterest;
+        sourceField.value = source;
+        programField.value = selectedProgram;
+
+        const resetToBase = () => {
+            form.reset();
+            interestField.value = selectedInterest;
+            sourceField.value = source;
+            programField.value = selectedProgram;
+            if (messageField) messageField.value = '';
+            messageCounter.textContent = '0 / 600';
+            statusEl.classList.add('hidden');
+            Array.from(
+                form.querySelectorAll('input, select, textarea, button'),
+            ).forEach((control) => {
+                if (
+                    !(
+                        control instanceof HTMLInputElement ||
+                        control instanceof HTMLSelectElement ||
+                        control instanceof HTMLTextAreaElement ||
+                        control instanceof HTMLButtonElement
+                    )
+                )
+                    return;
+                if (control.name === 'confirm-email') return;
+                control.disabled = false;
+            });
+            submitLabel.textContent = 'Send Enrollment Request';
+            submitLoader.classList.add('hidden');
+            submitLoader.classList.remove('submit-loader-active');
+        };
+
+        successModalBackdrop.addEventListener('click', () => {
+            closeSuccessModal();
+        });
+        successModalClose.addEventListener('click', () => {
+            closeSuccessModal();
+        });
+        successModal.addEventListener('keydown', trapModalFocus);
+        document.addEventListener('keydown', (event) => {
+            if (
+                event.key !== 'Escape' ||
+                successModal.classList.contains('hidden')
+            )
+                return;
+            closeSuccessModal();
+        });
+
+        if (source !== 'website') setTimeout(() => interestField.focus(), 60);
+
+        if (messageField) {
+            messageField.maxLength = 600;
+            const updateCount = () => {
+                messageCounter.textContent = `${messageField.value.length} / 600`;
+            };
+            messageField.addEventListener('input', updateCount);
+            updateCount();
+        }
+
+        interestField.addEventListener('change', () => {
+            if (!(interestField.value in interestLabels))
+                interestField.value = 'private-pilot';
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+
+            const honeypot = getFormValue(formData, 'confirm-email');
+            if (honeypot.length > 0) return;
+
+            const email = getFormValue(formData, 'email');
+            const phone = getFormValue(formData, 'phone');
+            const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            const phoneOk =
+                phone.length === 0 || /^\+?[\d()\-\s]{7,}$/.test(phone);
+            if (!form.checkValidity() || !emailOk || !phoneOk) {
+                if (!form.checkValidity()) form.reportValidity();
+                if (!emailOk)
+                    setStatus('Please enter a valid email address.', 'error');
+                else if (!phoneOk)
+                    setStatus('Phone format looks invalid.', 'error');
+                else setStatus('Please complete the required fields.', 'error');
+                return;
+            }
+
+            const payload = {
+                first_name: getFormValue(formData, 'first_name'),
+                last_name: getFormValue(formData, 'last_name'),
+                email,
+                phone,
+                interest: getFormValue(formData, 'interest'),
+                source: getFormValue(formData, 'source'),
+                program: getFormValue(formData, 'program'),
+                message: getFormValue(formData, 'message'),
+                campaign: getFormValue(formData, 'campaign'),
+            };
+            setLoading(true);
+            setStatus('Submitting your enrollment request...', 'loading');
+
+            try {
+                await new Promise((resolve) => setTimeout(resolve, 900));
+                if (!payload.email) throw new Error('Missing email');
+
+                setLoading(false);
+                resetToBase();
+                openSuccessModal();
+            } catch {
+                setLoading(false);
+                setStatus(
+                    'We could not submit this time. Please retry.',
+                    'error',
+                );
+            }
+        });
+    }
+
+    initContactForm();
+    document.addEventListener('astro:after-swap', initContactForm);
+</script>
